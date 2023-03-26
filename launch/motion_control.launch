@@ -1,0 +1,38 @@
+<launch>
+
+  <rosparam param="ticks_meter">7000</rosparam>
+
+  <node pkg="diff_drive" type="pid_velocity.py" name="lpid_velocity">
+      <remap from="wheel" to="lwheel_ticks"/>
+      <remap from="motor_cmd" to="lmotor"/>
+      <remap from="wheel_vtarget" to="lwheel_vtarget"/>
+      <remap from="wheel_vel" to="lwheel_vactual"/>
+      <rosparam param="Kp">480</rosparam>
+      <rosparam param="Ki">480</rosparam>
+      <rosparam param="Kd">70</rosparam>
+      <rosparam param="out_min">-255</rosparam>
+      <rosparam param="out_max">255</rosparam>
+      <rosparam param="rate">30</rosparam>
+      <rosparam param="timeout_ticks">10</rosparam>
+      <rosparam param="rolling_pts">5</rosparam>
+  </node>
+  <node pkg="diff_drive" type="pid_velocity.py" name="rpid_velocity">
+      <remap from="wheel" to="rwheel_ticks"/>
+      <remap from="motor_cmd" to="rmotor"/>
+      <remap from="wheel_vtarget" to="rwheel_vtarget"/>
+      <remap from="wheel_vel" to="rwheel_vactual"/>
+      <rosparam param="Kp">480</rosparam>
+      <rosparam param="Ki">480</rosparam>
+      <rosparam param="Kd">70</rosparam>
+      <rosparam param="out_min">-255</rosparam>
+      <rosparam param="out_max">255</rosparam>
+      <rosparam param="rate">30</rosparam>
+      <rosparam param="timeout_ticks">10</rosparam>
+      <rosparam param="rolling_pts">5</rosparam>
+  </node>
+
+  <node pkg="diff_drive" type="twist_to_motors.py" name="twist_to_motors" output="screen">
+    <rosparam param="base_width">0.55</rosparam>
+  </node>
+
+</launch>

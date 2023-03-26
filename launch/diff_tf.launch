@@ -1,0 +1,10 @@
+<launch>
+
+  <rosparam param="ticks_meter">2480</rosparam>
+
+  <node pkg="diff_drive" type="diff_tf.py" name="diff_tf" output="screen">
+    <rosparam param="base_width">0.55</rosparam>
+    <rosparam param="rate">30</rosparam>
+  </node>
+
+</launch>

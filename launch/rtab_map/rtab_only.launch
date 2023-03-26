@@ -1,0 +1,47 @@
+<launch>
+  <!-- Kinect cloud to laser scan -->
+    <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan">
+    
+    
+ 	<remap from="depth/image" to="/kinect2/hd/image_depth_rect"/>
+      <remap from="camera_info" to="/camera/depth_registered/camera_info"/>
+     
+            
+      <remap from="scan"        to="/kinect2_scan"/>
+      <param name="range_max" type="double" value="4"/>
+    </node>
+
+
+  <!-- robot state publishing -->
+<!-- URDF FILE & Launch file -->
+  <include file="$(find diff_drive)/launch/rtab_map/display.launch">
+  </include>
+
+
+  <!-- SLAM -->
+  <group ns="rtabmap">
+    <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">
+          <param name="frame_id" type="string" value="base_link"/>
+
+          <param name="subscribe_depth" type="bool" value="true"/>
+          <param name="subscribe_scan" type="bool" value="true"/>
+
+          <remap from="odom" to="/odom"/>
+          <remap from="scan" to="/kinect2_scan"/>
+
+      <remap from="rgb/image" to="/kinect2/hd/image_color_rect"/>
+      <remap from="depth/image" to="/kinect2/hd/image_depth_rect"/>
+      <remap from="rgb/camera_info" to="/kinect2/hd/camera_info"/>
+
+          <param name="queue_size" type="int" value="10"/>
+
+          <!-- RTAB-Map's parameters -->
+          <param name="RGBD/ProximityBySpace"     type="string" value="false"/>
+          <param name="RGBD/AngularUpdate"        type="string" value="0.01"/>
+          <param name="RGBD/LinearUpdate"         type="string" value="0.01"/>
+          <param name="RGBD/OptimizeFromGraphEnd" type="string" value="false"/>
+          <param name="Reg/Force3DoF"             type="string" value="true"/>
+          <param name="Vis/MinInliers"            type="string" value="12"/>
+    </node>
+  </group>
+</launch>
